@@ -1,42 +1,58 @@
 import React from "react";
 import { Launch } from "../Launch/Launch";
-import './liststyles.css'
+import './liststyles.css';
+import axios from 'axios';
+
 
 
 export class LaunchList extends React.Component {
+    state = {
+        launches: []
+    }
+
+
+    componentDidMount = () => {
+        this.getLaunches()
+    }
+
+    getLaunches = () => {
+        axios.get('https://api.spacexdata.com/v3/launches')
+            .then((response) => {
+                this.setState(
+                    {launches:response.data}
+                )
+
+            }).catch((error) => {
+                console.log(error)
+            })
+
+    }
+
+
+    launchList = () => {
+        const launchListComponent = this.state.launches.map((launch , index) => {
+           
+            const image = launch.links.flickr_images.length == 0 ?
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Soyuz_TMA-9_launch.jpg/1200px-Soyuz_TMA-9_launch.jpg' : 
+            launch.links.flickr_images[0];
+        
+         
+            return <Launch
+            key ={"launch"+ index}
+            banner={image}
+            title={launch.mission_name}
+            launchDate={launch.launch_date_local}
+            Description={launch.details}
+            />
+        } )
+        return launchListComponent;
+    }
+
     render() {
+        console.log(this.state.launches[0])
         return (
             <div className='launch-list'>
-                <Launch 
-                    banner=" https://farm8.staticflickr.com/7615/16670240949_8d43db0e36_o.jpg"
-                    title="FalconSat"
-                    launchDate="2006-03-25T10:30:00+12:00"
-                    Description="Commercial mission and first Falcon 9 v1.1 flight, with improved 13-tonne to LEO capacity.
-     Following second-stage separation from the first stage, an attempt was made to perform an ocean touchdown test of the discarded booster vehicle.
-     The test provided good test data on the experiment-its primary objective-but as the booster neared the ocean, aerodynamic forces caused an uncontrollable roll. 
-     The center engine, depleted of fuel by centrifugal force, shut down resulting in the impact and destruction of the vehicle."
-                />
-
-                <Launch
-                    banner=" https://farm8.staticflickr.com/7615/16670240949_8d43db0e36_o.jpg"
-                    title="FalconSat"
-                    launchDate="2006-03-25T10:30:00+12:00"
-                    Description="Commercial mission and first Falcon 9 v1.1 flight, with improved 13-tonne to LEO capacity.
-     Following second-stage separation from the first stage, an attempt was made to perform an ocean touchdown test of the discarded booster vehicle.
-     The test provided good test data on the experiment-its primary objective-but as the booster neared the ocean, aerodynamic forces caused an uncontrollable roll. 
-     The center engine, depleted of fuel by centrifugal force, shut down resulting in the impact and destruction of the vehicle."
-                />
-
-
-                <Launch
-                    banner=" https://farm8.staticflickr.com/7615/16670240949_8d43db0e36_o.jpg"
-                    title="FalconSat"
-                    launchDate="2006-03-25T10:30:00+12:00"
-                    Description="Commercial mission and first Falcon 9 v1.1 flight, with improved 13-tonne to LEO capacity.
-     Following second-stage separation from the first stage, an attempt was made to perform an ocean touchdown test of the discarded booster vehicle.
-     The test provided good test data on the experiment-its primary objective-but as the booster neared the ocean, aerodynamic forces caused an uncontrollable roll. 
-     The center engine, depleted of fuel by centrifugal force, shut down resulting in the impact and destruction of the vehicle."
-                />
+               {this.launchList()}
             </div>
 
 
