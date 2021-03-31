@@ -2,10 +2,26 @@ import React from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router';
 import './styles.css'
+import { Zoom } from 'react-slideshow-image';
+
+
+const zoomOutProperties = {
+    duration: 1000,
+    transitionDuration: 500,
+    infinite: true,
+    indicators: true,
+    scale: 0.4,
+    arrows: true
+};
+
 
 export class LaunchView extends React.Component {
     state = {
-        launch: {}
+        launch: {
+            links: {
+                flickr_images: []
+            }
+        }
 
     }
     componentDidMount = () => {
@@ -26,11 +42,11 @@ export class LaunchView extends React.Component {
             })
 
     }
-    launchAttribute = (title , key) => {
-        const value =this.state.launch[key]
+    launchAttribute = (title, key) => {
+        const value = this.state.launch[key]
         return (
-            
-            <div className="attribute"> 
+
+            <div className="attribute">
                 <h1>{title}</h1>
                 <h1>{value}</h1>
             </div>
@@ -38,16 +54,38 @@ export class LaunchView extends React.Component {
         );
     }
     render() {
-        console.log(this.state.launch)
+        const hasImages = this.state.launch.links.flickr_images.length > 0;
         return (
-            <div className="launchView"> 
+            <div className="launchView">
 
-                {this.launchAttribute("Mission Name","mission_name")}
-                {this.launchAttribute("Flight Number","flight_number")}
-                {this.launchAttribute("Launch Date","launch_date_local")}
+                {this.launchAttribute("Mission Name", "mission_name")}
+                {this.launchAttribute("Flight Number", "flight_number")}
+                {this.launchAttribute("Launch Date", "launch_date_local")}
+
+
+
+                {
+                    hasImages && (
+                        <div className="slide-container">
+                            <Zoom {...zoomOutProperties} >
+                                {
+                                    this.state.launch.links.flickr_images.map((each, index) =>
+                                        <img key={index} alt="images" style={{ width: "100%" }} src={each} />)
+                                }
+                            </Zoom>
+
+                        </div>
+
+                    )
+                }
+
+
+
+
+
                 <p className="description">{this.state.launch.details}</p>
 
-               
+
 
             </div>
 
