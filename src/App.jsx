@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Header } from './components/Header/header'
-import { LaunchView } from './components/LanchView/LanchView'
+import LaunchView  from './components/LanchView/LanchView'
 import { LaunchList } from './components/LaunchesList/LaunchesList'
 import './styles.css'
 
