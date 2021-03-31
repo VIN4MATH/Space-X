@@ -16,6 +16,7 @@
 .info{
     display: flex;
     justify-content: space-between;
+    font-family: sans-serif;
     
 }
 .content{
@@ -31,5 +32,6 @@
     -webkit-box-orient: vertical;
     overflow:hidden;
     margin: 20px;
-    color:grey;
+    color:whitesmoke;
+    font-family: monospace;
 }
